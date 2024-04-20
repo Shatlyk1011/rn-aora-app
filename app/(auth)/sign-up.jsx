@@ -1,13 +1,15 @@
-import { View, Text, ScrollView, Image } from "react-native";
-import React, { useState } from "react";
+import { useState } from "react";
+import { View, Text, ScrollView, Image, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { images } from "../../constants";
 import FormField from "../../components/FormField";
 
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 
+import { createUser } from "../../lib/appwrite";
 import CustomButton from "../../components/CustomButton";
+
 const SignUp = () => {
   const [form, setForm] = useState({
     userName: "",
@@ -17,7 +19,25 @@ const SignUp = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submit = () => {};
+  const submit = async () => {
+    if (!form.userName || !form.email || !form.password) {
+      Alert.alert("Error1", "Please fill all the fields");
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const result = await createUser(form.email, form.password, form.userName);
+      console.log("result", result);
+      //set "result" to global state...
+
+      router.replace("/home");
+    } catch (err) {
+      Alert.alert("Error", err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -26,7 +46,7 @@ const SignUp = () => {
           <Image source={images.logo} resizeMode="contain" className="w-[115px] h-[35px] " />
           <Text className="text-2xl text-white mt-10 font-psemibold">Sign up to Auro</Text>
           <FormField
-            title="Email"
+            title="Username"
             value={form.userName}
             handleChange={(e) => setForm({ ...form, userName: e })}
             otherStyles="mt-8"

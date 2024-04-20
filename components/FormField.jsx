@@ -12,9 +12,10 @@ const FormField = ({ title, value, placeholder, handleChange, otherStyles, ...pr
           className="flex-1 text-white font-psemibold text-base text-start"
           value={value}
           placeholder={placeholder}
-          onChange={handleChange}
+          onChangeText={handleChange}
           placeholderTextColor="#7b7b8b"
           secureTextEntry={title === "Password" && !showPassword}
+          {...props}
         />
         {title === "Password" && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
