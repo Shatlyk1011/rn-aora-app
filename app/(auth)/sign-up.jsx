@@ -28,7 +28,6 @@ const SignUp = () => {
 
     try {
       const result = await createUser(form.email, form.password, form.userName);
-      console.log("result", result);
       //set "result" to global state...
 
       router.replace("/home");
